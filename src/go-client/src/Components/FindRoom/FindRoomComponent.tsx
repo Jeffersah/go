@@ -24,14 +24,14 @@ export default function FindRoomComponent(props: {baseUrl: string, player: IPlay
         setWaitingForServer(true);
         (roomPollControl.current as RoomSearchController).tryJoinRoom(room, props.player)
             .then(props.onJoinedRoom)
-            .catch(err => { setWaitingForServer(false);alert('Failed: ' + err?.ToString()); });
+            .catch(err => { setWaitingForServer(false);alert('Failed: ' + err?.toString()); });
     }
 
     function tryCreateRoom(){
         setWaitingForServer(true);
         (roomPollControl.current as RoomSearchController).tryCreateRoom(roomName, props.player)
             .then(props.onJoinedRoom)
-            .catch(err => { setWaitingForServer(false); alert('Failed: ' + err?.ToString()); });
+            .catch(err => { setWaitingForServer(false); alert('Failed: ' + err?.toString()); });
     }
 
     return (

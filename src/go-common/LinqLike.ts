@@ -11,7 +11,7 @@ export function GroupBy<T>(arr: T[], keySelector: (item: T) => string): { [key: 
 }
 
 export function WithDistinct<T, TK>(arr: T[], keySelector: (item: T) => TK, eq?: (a: TK, b: TK) => boolean): T[] {
-    const equalityComparer = eq ?? ((a, b) => a === b);
+    const equalityComparer = eq !== undefined ? eq : ((a, b) => a === b);
     const keys: TK[] = [];
     const results: T[] = [];
     for (const item of arr) {
@@ -19,6 +19,7 @@ export function WithDistinct<T, TK>(arr: T[], keySelector: (item: T) => TK, eq?:
         if(keys.some(k => equalityComparer(k, key))) {
             continue;
         }
+        keys.push(key);
         results.push(item);
     }
     return results;

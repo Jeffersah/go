@@ -15,7 +15,7 @@ function GroupBy(arr, keySelector) {
 }
 exports.GroupBy = GroupBy;
 function WithDistinct(arr, keySelector, eq) {
-    var equalityComparer = eq !== null && eq !== void 0 ? eq : (function (a, b) { return a === b; });
+    var equalityComparer = eq !== undefined ? eq : (function (a, b) { return a === b; });
     var keys = [];
     var results = [];
     var _loop_1 = function (item) {
@@ -23,6 +23,7 @@ function WithDistinct(arr, keySelector, eq) {
         if (keys.some(function (k) { return equalityComparer(k, key); })) {
             return "continue";
         }
+        keys.push(key);
         results.push(item);
     };
     for (var _i = 0, arr_2 = arr; _i < arr_2.length; _i++) {
