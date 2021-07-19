@@ -1,0 +1,15 @@
+.player-wrapper {
+    border: 1px solid black;
+    padding: 8px;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.player-name {
+    font-size: 14px;
+}
+
+.is-you {
+    color: '#888';
+}

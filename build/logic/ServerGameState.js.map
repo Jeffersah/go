@@ -1,1 +1,0 @@
-{"version":3,"file":"ServerGameState.js","sourceRoot":"","sources":["../../src/logic/ServerGameState.ts"],"names":[],"mappings":";;;AAeA,SAAgB,YAAY,CAAC,KAAsB;IAC/C,OAAO,CAAC,KAAK,CAAC,KAAK,CAAC,YAAY,CAAC;AACrC,CAAC;AAFD,oCAEC;AAED,SAAgB,cAAc,CAAC,KAAsB;IACjD,OAAO,KAAK,CAAC,KAAK,CAAC,YAAY,CAAC;AACpC,CAAC;AAFD,wCAEC"}

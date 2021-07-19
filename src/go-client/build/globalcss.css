@@ -1,0 +1,123 @@
+* {
+    box-sizing: border-box;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex.col {
+    flex-direction: column;
+}
+
+.flex.row {
+    flex-direction: row;
+}
+
+.flex.justify-center {
+    justify-content: center;
+}
+
+.flex.justify-start {
+    justify-content: flex-start;
+}
+
+.flex.justify-end {
+    justify-content: flex-end;
+}
+
+.flex.justify-space-between {
+    justify-content: space-between;
+}
+
+.flex.justify-space-around {
+    justify-content: space-around;
+}
+
+.flex.align-center {
+    align-items: center;
+}
+
+.flex.align-start {
+    align-items: flex-start;
+}
+
+.flex.align-end { 
+    align-items: flex-end;
+}
+
+.flex.align-stretch {
+    align-items: stretch;
+}
+
+.flex.align-center {
+    align-items: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.spinner {
+    margin-left: auto;
+    margin-right: auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.blinker {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.blinker div {
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    margin: 3px;
+}
+
+.blinker div:first-child {
+    animation: blink 1s linear infinite;
+}
+
+.blinker div {
+    animation: blink 1s linear infinite;
+    animation-delay: 300ms;
+}
+
+.blinker div:last-child {
+    animation: blink 1s linear infinite;
+    animation-delay: 600ms;
+}
+
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,60 @@
+.lobby-component {
+    max-width: 600px;
+    font-size: 120%;
+    border: 1px solid #344;
+    padding: 20px;
+}
+
+.submitButton {
+    border-radius: 0 4px 4px 0;
+    padding: 8px;
+    background-color: #21662a;
+    border: 1px solid;
+    border-color: #666 #222 #222 #666;
+
+    transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+    background-color: rgb(62, 155, 74);
+}
+
+.submitButton:active:not(:disabled){
+    background-color: #1a5022;
+    border-color: #222 #666 #666 #222;
+}
+
+.submitButton:disabled {
+    background-color: #28382a;
+}
+
+.wait-text {
+    font-size: .6em;
+    color: #ccc;
+}
+.left-align {
+    text-align: left;
+}
+.collist:first-child {
+    margin-right: 40px;
+}
+.collist:last-child {
+    margin-left: 40px;
+}
+
+ul {
+    margin: 0;
+}
+
+.rule-list {
+    align-items: stretch;
+}
+.rule {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.rule input {
+    margin-left: 16px;
+}
