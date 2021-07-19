@@ -7,7 +7,8 @@
     "build": "tsc",
     "start": "node build/app.js",
     "heroku_stop": "heroku ps:scale web=0",
-    "heroku_start": "heroku ps:scale web=1"
+    "heroku_start": "heroku ps:scale web=1",
+    "heroku_publish": "git push heroku master"
   },
   "author": "",
   "license": "ISC",
