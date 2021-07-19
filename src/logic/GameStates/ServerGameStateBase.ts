@@ -4,11 +4,11 @@ import { Distinct } from "../../go-common/LinqLike";
 
 export const Neighbors = [{x: -1, y: 0}, {x: 1, y: 0}, {x: 0, y: -1}, {x: 0, y: 1}];
 
-export default class ServerGameStateBase {
+export default class ServerGameStateBase<TRules extends IGameRules> {
     cells: number[][];
     captureCounts: number[];
 
-    constructor(public rules: IGameRules, public playerCount: number) {
+    constructor(public rules: TRules, public playerCount: number) {
         this.cells = [];
         for(let i = 0; i < rules.boardSize; i++) {
             const col: number[] = [];

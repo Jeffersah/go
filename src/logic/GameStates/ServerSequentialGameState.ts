@@ -1,13 +1,13 @@
-import { IGameRules } from "../../go-common/IGameRules";
+import { IGameRules, ISequentialGameRules } from "../../go-common/IGameRules";
 import { IGameState, IMove } from "../../go-common/IGameState";
 import { GamePlayResult, PlayResult } from "../../go-common/IPlayResult";
 import { IServerGameState } from "../ServerGameState";
 import ServerGameStateBase, { Neighbors } from "./ServerGameStateBase";
 
-export default class ServerSequentialGameState extends ServerGameStateBase implements IServerGameState {
+export default class ServerSequentialGameState extends ServerGameStateBase<ISequentialGameRules> implements IServerGameState {
     moves: IMove[];
     
-    constructor(rules: IGameRules, playerCount: number) {
+    constructor(rules: ISequentialGameRules, playerCount: number) {
         super(rules, playerCount);
         this.moves = [];
     }

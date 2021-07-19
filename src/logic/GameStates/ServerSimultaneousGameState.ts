@@ -1,11 +1,11 @@
-import { IGameRules } from "../../go-common/IGameRules";
+import { IGameRules, ISimultaneousGameRules } from "../../go-common/IGameRules";
 import { IGameState, IMove } from "../../go-common/IGameState";
 import { GamePlayResult, PlayResult } from "../../go-common/IPlayResult";
 import { GroupBy, WithDistinct } from "../../go-common/LinqLike";
 import { IServerGameState } from "../ServerGameState";
 import ServerGameStateBase, { Neighbors } from "./ServerGameStateBase";
 
-export default class ServerSimultaneousGameState extends ServerGameStateBase implements IServerGameState {
+export default class ServerSimultaneousGameState extends ServerGameStateBase<ISimultaneousGameRules> implements IServerGameState {
     moves: IMove[][];
     pendingMoves: (IMove|null)[];
     illegalMoves: IMove[][];
@@ -15,7 +15,7 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase imp
     playerStates: number[];
     remainingPlayers: number[];
 
-    constructor(rules: IGameRules, playerCount: number) {
+    constructor(rules: ISimultaneousGameRules, playerCount: number) {
         super(rules, playerCount);
         this.moves = [];
         this.remainingPlayers = [];
@@ -68,6 +68,13 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase imp
                 actualPlays.push(plays[0]);
             } else {
                 const sizes = plays.map(p => ({...p, size: this.getAllConnectedGroups(p.move.x, p.move.y, p.player).length}));
+
+                // If we don't care about group size, we just bounce all the players who played here.
+                if(!this.rules.largeGroupsWinBounces) {
+                    this.markIllegalMoves(sizes);
+                    continue;
+                }
+
                 sizes.sort((a, b) => b.size - a.size);
                 const largest = sizes.filter(s => s.size === sizes[0].size);
                 if(largest.length > 1) {

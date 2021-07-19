@@ -1,5 +1,5 @@
 import ServerGameState from "../logic/ServerGameState";
-import { IGameRules } from "./IGameRules";
+import { GameRules, IGameRules } from "./IGameRules";
 import { IGameState, IMove } from "./IGameState";
 import IPlayer, { ClientPlayerView, IServerPlayer } from "./IPlayer";
 
@@ -7,7 +7,7 @@ export default interface IRoom {
     id: number;
     name: string;
     players: IPlayer[];
-    rules: IGameRules;
+    rules: GameRules;
     game?: IGameState;
 }
 
@@ -15,7 +15,7 @@ export interface IServerRoom {
     id: number;
     name: string;
     players: IServerPlayer[];
-    rules: IGameRules;
+    rules: GameRules;
     game?: ServerGameState;
 }
 

@@ -43,30 +43,45 @@ export default function LobbyComponent(props: { baseUrl: string, player: IPlayer
             });
     }
 
+    function getRuleType(value: any): string {
+        if(typeof(value) === "number") { return 'number'; }
+        if(typeof(value) === "boolean") { return 'checkbox'; }
+        return 'text';
+    }
+
+    function getChecked(value: any): boolean|undefined {
+        if(typeof(value) === "boolean") { return value; }
+        return undefined;
+    }
+
+    function getValue(value: any) {
+        if(typeof(value) === "boolean") { return undefined; }
+        return value;
+    }
+
+    function getChangedValue(elem: HTMLInputElement, value: any): any {
+        if(typeof(value) === 'boolean') return elem.checked;
+        if(typeof(value) === 'number') return elem.valueAsNumber;
+        return elem.value;
+    }
+
+    const ruleItems: JSX.Element[] = [];
+    for (const key in room.rules) {
+        if (room.rules.hasOwnProperty(key)) {
+            ruleItems.push(<div key={key} className='rule'>
+                <label>{key}:</label>
+                <input disabled={!isHost || waitingForServer} type={getRuleType((room.rules as any)[key])} checked={getChecked((room.rules as any)[key])} value={getValue((room.rules as any)[key])} onChange={e => tryUpdateRule({ [key]: getChangedValue(e.target, (room.rules as any)[key]) })} />
+            </div>);
+        }
+    }
+
     return <div className='lobby-component'>
         <div>{room.name}</div>
         {isHost? <button className='submitButon' onClick={tryStartGame}>Start Game</button>:<div className='wait-text'>Waiting for host to start...</div>}
         <div className='flex row left-align'>
             <div className='flex col collist rule-list'>
                 <div>Rules:</div>
-                <div className='rule'>
-                    <label>Simultaneous:</label>
-                    <input disabled={!isHost || waitingForServer} type='checkbox' checked={room.rules.simultaneous} onChange={(ev) => tryUpdateRule({ simultaneous: ev.target.checked })} />
-                </div>
-                <div className='rule'>
-                    <label>Board Size:</label>
-                    <input disabled={!isHost || waitingForServer} type='number' value={room.rules.boardSize} onChange={(ev) => tryUpdateRule({ boardSize: ev.target.valueAsNumber })} />
-                </div>
-                
-                <div className='rule'>
-                    <label>Max Players:</label>
-                    <input disabled={!isHost || waitingForServer} type='number' value={room.rules.maxPlayerCount} onChange={(ev) => tryUpdateRule({ maxPlayerCount: ev.target.valueAsNumber })} />
-                </div>
-                
-                <div className='rule'>
-                    <label>Komi:</label>
-                    <input disabled={!isHost || waitingForServer} type='number' value={room.rules.komi} onChange={(ev) => tryUpdateRule({ komi: ev.target.valueAsNumber })} />
-                </div>
+                {ruleItems}
             </div>
             <div className='flex col collist'>
                 <div>Players:</div>

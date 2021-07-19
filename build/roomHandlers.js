@@ -110,6 +110,15 @@ function BindRoomEndpoints(app, getPlayer) {
         if (room.game !== undefined) {
             res.status(400).send('Can\'t change rules while the game is running');
         }
+        if (newRules.simultaneous === undefined || newRules.simultaneous === room.rules.simultaneous) {
+            room.rules = __assign(__assign({}, room.rules), newRules);
+        }
+        else if (newRules.simultaneous) {
+            room.rules = __assign(__assign({}, IGameRules_1.defaultSimultaneousGameRules), newRules);
+        }
+        else {
+            room.rules = __assign(__assign({}, IGameRules_1.defaultGameRules), newRules);
+        }
         room.rules = __assign(__assign({}, room.rules), newRules);
         res.send(IRoom_1.ClientView(room, playerId));
     });

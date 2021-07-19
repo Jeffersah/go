@@ -1,7 +1,7 @@
 import { ClientView, IServerRoom } from "./go-common/IRoom";
 import { Express } from "express";
 import { IServerPlayer } from "./go-common/IPlayer";
-import { defaultGameRules, IGameRules } from "./go-common/IGameRules";
+import { defaultGameRules, defaultSimultaneousGameRules, IGameRules } from "./go-common/IGameRules";
 import { Optional } from "./go-common/MappedTypes";
 import ServerSimultaneousGameState from "./logic/GameStates/ServerSimultaneousGameState";
 import ServerSequentialGameState from "./logic/GameStates/ServerSequentialGameState";
@@ -79,7 +79,7 @@ export default function BindRoomEndpoints(app: Express, getPlayer: (id: number) 
     // Change rules of a room
     app.post('/room/:roomId', (req, res) => {
         console.log('POST: ' + req.url);
-        const newRules = req.body as Optional<IGameRules>;
+        const newRules = req.body as any;
         const roomId = parseInt(req.params.roomId);
         const playerId = parseInt(req.query.playerId?.toString() ?? '');
         const playerSecret = req.query.playerSecret?.toString() ?? '';
@@ -112,6 +112,16 @@ export default function BindRoomEndpoints(app: Express, getPlayer: (id: number) 
 
         if(room.game !== undefined) {
             res.status(400).send('Can\'t change rules while the game is running');
+        }
+
+        if(newRules.simultaneous === undefined || newRules.simultaneous === room.rules.simultaneous) {
+            room.rules = {...room.rules, ...newRules};
+        }
+        else if(newRules.simultaneous) {
+            room.rules = {...defaultSimultaneousGameRules, ...newRules };
+        }
+        else {
+            room.rules = {...defaultGameRules, ...newRules };
         }
 
         room.rules = {...room.rules, ...newRules};

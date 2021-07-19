@@ -85,6 +85,11 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
             }
             else {
                 var sizes_1 = plays.map(function (p) { return (__assign(__assign({}, p), { size: _this.getAllConnectedGroups(p.move.x, p.move.y, p.player).length })); });
+                // If we don't care about group size, we just bounce all the players who played here.
+                if (!this_1.rules.largeGroupsWinBounces) {
+                    this_1.markIllegalMoves(sizes_1);
+                    return "continue";
+                }
                 sizes_1.sort(function (a, b) { return b.size - a.size; });
                 var largest = sizes_1.filter(function (s) { return s.size === sizes_1[0].size; });
                 if (largest.length > 1) {

@@ -8,7 +8,6 @@ export default function RoomPreviewComponent(props: { player: IPlayer, room: IRo
     if(rules.simultaneous) descriptionString += 'Simultaneous, ';
     else descriptionString += 'Standard, '
     descriptionString += rules.boardSize + 'x' + rules.boardSize + ', ';
-    descriptionString += rules.komi + ' komi';
     return <div className='room-preview'>
         <div className='flex row justify-space-between'>
             <div>{props.room.name}</div>

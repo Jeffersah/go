@@ -9,7 +9,7 @@ import GameController from './Rest/GameController';
 import InGameComponent from './Components/InGame/InGameComponent';
 import IRoom from '../../go-common/IRoom'
 
-const baseUrl = '';
+let baseUrl = window.location.href.indexOf('localhost:3000') === -1 ? '' : 'http://localhost:8080';
 
 function App() {
   const [playerKeepAlive, setPlayer] = React.useState<KeepAlivePlayer | null>(null);
