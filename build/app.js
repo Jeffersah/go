@@ -70,7 +70,8 @@ app.put('/player', function (req, res) {
 });
 var getRoom = roomHandlers_1.default(app, function (pid) { return allPlayers[pid]; });
 gameHandlers_1.default(app, function (pid) { return allPlayers[pid]; }, getRoom);
-var portString = process.env.port;
+console.log('Env port: ' + process.env.PORT);
+var portString = process.env.PORT;
 if (portString === undefined || portString === null || portString === '') {
     portString = '8080';
 }

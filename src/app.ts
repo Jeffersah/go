@@ -53,7 +53,8 @@ app.put('/player', (req, res) => {
 const getRoom = BindRoomEndpoints(app, pid => allPlayers[pid]);
 BindGameEndpoints(app, pid => allPlayers[pid], getRoom);
 
-let portString = process.env.port;
+console.log('Env port: ' + process.env.PORT);
+let portString = process.env.PORT;
 if(portString === undefined || portString === null || portString === '') {
     portString = '8080';
 }
