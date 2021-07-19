@@ -240,7 +240,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
         var _a;
         if (this.playerStates[index] === lastSeenState)
             return undefined;
-        var highlightMoves = this.moves.length <= 1 ? [] : this.moves[this.moves.length - 2];
+        var highlightMoves = this.moves.length <= 1 ? [] : this.moves[this.moves.length - 2].filter(function (m) { return m !== null; });
         return {
             cells: this.cells,
             captureCounts: this.captureCounts,

@@ -220,7 +220,7 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
     public getStateForPlayer(index: number, lastSeenState: number): IGameState | undefined {
         if(this.playerStates[index] === lastSeenState) return undefined;
 
-        const highlightMoves = this.moves.length <= 1 ? [] : this.moves[this.moves.length - 2] as IMove[];
+        const highlightMoves = this.moves.length <= 1 ? [] : this.moves[this.moves.length - 2].filter(m => m !== null) as IMove[];
         return {
             cells: this.cells,
             captureCounts: this.captureCounts,
