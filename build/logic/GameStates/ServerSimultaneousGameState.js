@@ -40,7 +40,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
     __extends(ServerSimultaneousGameState, _super);
     function ServerSimultaneousGameState(rules, playerCount) {
         var _this = _super.call(this, rules, playerCount) || this;
-        _this.moves = [];
+        _this.moves = [Array(_this.playerCount).fill(null)];
         _this.remainingPlayers = [];
         _this.pendingMoves = [];
         _this.illegalMoves = [];
@@ -100,7 +100,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
                     // Crush
                     actualPlays.push(largest[0]);
                     for (var i = 1; i < largest.length; i++) {
-                        actualPlays.push({ crushedBy: largest[0].player, player: largest[i].player });
+                        actualPlays.push({ crushedBy: largest[0].player, player: largest[i].player, move: largest[i].move });
                     }
                 }
             }
@@ -113,13 +113,14 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
         // Play all the resolved moves
         for (var _i = 0, actualPlays_1 = actualPlays; _i < actualPlays_1.length; _i++) {
             var play = actualPlays_1[_i];
-            if (play.move !== undefined) {
-                this.cells[play.move.x][play.move.y] = play.player;
-                lookForKill.push(play.move);
-            }
-            else {
+            this.moves[this.moves.length - 1][play.player] = play.move;
+            if (play.crushedBy !== undefined) {
                 var crushed = play.crushedBy;
                 this.captureCounts[crushed]++;
+            }
+            else {
+                this.cells[play.move.x][play.move.y] = play.player;
+                lookForKill.push(play.move);
             }
         }
         var killedGroups = [];
@@ -170,6 +171,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
                 this.illegalMoves[i] = [];
                 this.pendingMoves[i] = null;
             }
+            this.moves.push(Array(this.playerCount).fill(null));
         }
     };
     ServerSimultaneousGameState.prototype.sortCaptureGroups = function (killedGroups, playerMoves) {
@@ -238,6 +240,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
         var _a;
         if (this.playerStates[index] === lastSeenState)
             return undefined;
+        var highlightMoves = this.moves.length <= 1 ? [] : this.moves[this.moves.length - 2];
         return {
             cells: this.cells,
             captureCounts: this.captureCounts,
@@ -245,6 +248,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
             previewMove: (_a = this.pendingMoves[index]) !== null && _a !== void 0 ? _a : undefined,
             illegalMoves: this.illegalMoves[index],
             state: this.playerStates[index],
+            highlightMoves: highlightMoves
         };
     };
     return ServerSimultaneousGameState;

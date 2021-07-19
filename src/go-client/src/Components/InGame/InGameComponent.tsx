@@ -6,11 +6,11 @@ import './InGameComponent.css';
 import SingleCellComponent from "./SingleCellComponent";
 
 export const gradientColors:{ from: string, to: string, name: string }[] = [
-    { from: "#444", to: "#111", name:'black' },
-    { from: "#FFF", to: "#ccc", name:'white' },
-    { from: "#F66", to: "#600", name:'red' },
-    { from: "#6F6", to: "#060", name:'green' },
-    { from: "#66F", to: "#006", name:'blue' },
+    { from: "#444", to: "#000", name:'black' },
+    { from: "#FFF", to: "#888", name:'white' },
+    { from: "#F11", to: "#311", name:'red' },
+    { from: "#1F1", to: "#131", name:'green' },
+    { from: "#11F", to: "#113", name:'blue' },
 ];
 
 export default function InGameComponent(props: { gameController: GameController, player: IPlayer }) {
@@ -79,6 +79,7 @@ export default function InGameComponent(props: { gameController: GameController,
                                 <SingleCellComponent 
                                     isIllegal={(gameState?.illegalMoves?.findIndex(m => m.x === c && m.y === r) ?? -1) !== -1}
                                     isPendingMove={gameState?.previewMove?.x === c && gameState?.previewMove?.y === r}
+                                    highlight={(gameState?.highlightMoves?.findIndex(m => m.x === c && m.y === r) ?? -1) !== -1}
                                     value={cell}
                                     myTurn={myTurn}
                                     myPlayerIndex={playerIndex}

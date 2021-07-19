@@ -7,6 +7,7 @@ export interface IGameState {
     myTurn: boolean;
     previewMove?: IMove;
     illegalMoves?: IMove[];
+    highlightMoves?: IMove[];
     state: number;
 }
 

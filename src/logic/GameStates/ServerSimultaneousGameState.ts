@@ -6,7 +6,7 @@ import { IServerGameState } from "../ServerGameState";
 import ServerGameStateBase, { Neighbors } from "./ServerGameStateBase";
 
 export default class ServerSimultaneousGameState extends ServerGameStateBase<ISimultaneousGameRules> implements IServerGameState {
-    moves: IMove[][];
+    moves: (IMove|null)[][];
     pendingMoves: (IMove|null)[];
     illegalMoves: IMove[][];
     // Last-seen state numbers for each player
@@ -17,7 +17,7 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
 
     constructor(rules: ISimultaneousGameRules, playerCount: number) {
         super(rules, playerCount);
-        this.moves = [];
+        this.moves = [Array(this.playerCount).fill(null)];
         this.remainingPlayers = [];
         this.pendingMoves = [];
         this.illegalMoves = [];
@@ -85,7 +85,7 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
                     // Crush
                     actualPlays.push(largest[0]);
                     for(let i = 1; i < largest.length; i++) {
-                        actualPlays.push({ crushedBy: largest[0].player, player: largest[i].player });
+                        actualPlays.push({ crushedBy: largest[0].player, player: largest[i].player, move: largest[i].move });
                     }
                 }
             }
@@ -94,12 +94,15 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
         const lookForKill: IMove[] = [];
         // Play all the resolved moves
         for(const play of actualPlays) {
-            if((play as any).move !== undefined) {
-                this.cells[(play as any).move.x][(play as any).move.y] = play.player;
-                lookForKill.push((play as any).move);
-            } else {
+            this.moves[this.moves.length-1][play.player] = play.move;
+            if((play as any).crushedBy !== undefined)
+            {
                 const crushed = (play as any).crushedBy;
                 this.captureCounts[crushed]++;
+            }
+            else {
+                this.cells[play.move.x][play.move.y] = play.player;
+                lookForKill.push(play.move);
             }
         }
 
@@ -151,6 +154,7 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
                 this.illegalMoves[i] = [];
                 this.pendingMoves[i] = null;
             }
+            this.moves.push(Array(this.playerCount).fill(null));
         }
     }
 
@@ -215,6 +219,8 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
 
     public getStateForPlayer(index: number, lastSeenState: number): IGameState | undefined {
         if(this.playerStates[index] === lastSeenState) return undefined;
+
+        const highlightMoves = this.moves.length <= 1 ? [] : this.moves[this.moves.length - 2] as IMove[];
         return {
             cells: this.cells,
             captureCounts: this.captureCounts,
@@ -222,8 +228,9 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
             previewMove: this.pendingMoves[index] ?? undefined,
             illegalMoves: this.illegalMoves[index],
             state: this.playerStates[index],
+            highlightMoves: highlightMoves
         };
     }
 }
 
-type ResolvedPlay = { move: IMove, player: number } | { crushedBy: number, player: number };
+type ResolvedPlay = { move: IMove, player: number } | { move: IMove, crushedBy: number, player: number };
