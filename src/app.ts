@@ -13,7 +13,7 @@ let nextPlayerId = 0;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('./src/go-client/build'));
+app.use(express.static('./src/go-client/build/'));
 
 app.get('/player/:pid', (req, res) => {
     const id = parseInt(req.params.pid);

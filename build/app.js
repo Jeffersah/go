@@ -34,7 +34,7 @@ var allPlayers = {};
 var nextPlayerId = 0;
 app.use(cors_1.default());
 app.use(express_1.default.json());
-app.use(express_1.default.static('./go-client/build'));
+app.use(express_1.default.static('./src/go-client/build/'));
 app.get('/player/:pid', function (req, res) {
     var id = parseInt(req.params.pid);
     if (isNaN(id)) {
