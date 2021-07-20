@@ -35,7 +35,7 @@ var ServerGameStateBase = /** @class */ (function () {
         }
         return LinqLike_1.Distinct(openOrClosedLiberties, IGameState_1.MovesEqual);
     };
-    ServerGameStateBase.GetGroupsKilledByPlay = function (cells, x, y) {
+    ServerGameStateBase.GetGroupsKilledByPlay = function (cells, x, y, alwaysIncludeSelf) {
         var player = cells[x][y];
         var groupsKilled = [];
         for (var _i = 0, Neighbors_2 = exports.Neighbors; _i < Neighbors_2.length; _i++) {
@@ -52,7 +52,7 @@ var ServerGameStateBase = /** @class */ (function () {
                 groupsKilled.push(group);
             }
         }
-        if (groupsKilled.length === 0) {
+        if (groupsKilled.length === 0 || alwaysIncludeSelf) {
             var selfGroup = ServerGameStateBase.GetConnectedCells(cells, x, y);
             if (ServerGameStateBase.IsGroupDead(cells, selfGroup)) {
                 return [selfGroup];

@@ -109,7 +109,7 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
         let killedGroups: { id: IMove, items: IMove[] }[] = [];
         // Kill all captured groups
         for(const killMove of lookForKill) {
-            for(const group of ServerGameStateBase.GetGroupsKilledByPlay(this.cells, killMove.x, killMove.y)) {
+            for(const group of ServerGameStateBase.GetGroupsKilledByPlay(this.cells, killMove.x, killMove.y, true)) {
                 killedGroups.push({ id: ServerGameStateBase.GetGroupId(group), items: group });
             }
         }

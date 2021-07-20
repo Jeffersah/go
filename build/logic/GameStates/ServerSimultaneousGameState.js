@@ -127,7 +127,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
         // Kill all captured groups
         for (var _a = 0, lookForKill_1 = lookForKill; _a < lookForKill_1.length; _a++) {
             var killMove = lookForKill_1[_a];
-            for (var _b = 0, _c = ServerGameStateBase_1.default.GetGroupsKilledByPlay(this.cells, killMove.x, killMove.y); _b < _c.length; _b++) {
+            for (var _b = 0, _c = ServerGameStateBase_1.default.GetGroupsKilledByPlay(this.cells, killMove.x, killMove.y, true); _b < _c.length; _b++) {
                 var group = _c[_b];
                 killedGroups.push({ id: ServerGameStateBase_1.default.GetGroupId(group), items: group });
             }

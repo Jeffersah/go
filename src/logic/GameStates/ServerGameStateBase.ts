@@ -35,7 +35,7 @@ export default class ServerGameStateBase<TRules extends IGameRules> {
         return Distinct(openOrClosedLiberties, MovesEqual);
     }
 
-    static GetGroupsKilledByPlay(cells: number[][], x: number, y: number): IMove[][] {
+    static GetGroupsKilledByPlay(cells: number[][], x: number, y: number, alwaysIncludeSelf?: boolean): IMove[][] {
         const player = cells[x][y];
         const groupsKilled: IMove[][] = [];
         for(const c of Neighbors) {
@@ -49,7 +49,7 @@ export default class ServerGameStateBase<TRules extends IGameRules> {
             }
         }
 
-        if(groupsKilled.length === 0) {
+        if(groupsKilled.length === 0 || alwaysIncludeSelf) {
             const selfGroup = ServerGameStateBase.GetConnectedCells(cells, x, y);
             if(ServerGameStateBase.IsGroupDead(cells, selfGroup)) {
                 return[selfGroup];
