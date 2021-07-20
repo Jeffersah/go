@@ -117,9 +117,9 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
         killedGroups = WithDistinct(killedGroups, g => g.id, (a, b) => a.x == b.x && a.y == b.y);
         // Sort killed groups, smallest first
         // Also put the player groups last, so they are the last to be captured
-        killedGroups = this.sortCaptureGroups(killedGroups, lookForKill);
+        const [sortedKillGroups, suicideGroups] = this.sortCaptureGroups(killedGroups, lookForKill);
         // Then split these in order into groups of the same size
-        const splitBySize = this.splitCaptureGroupsBySize(killedGroups);
+        const splitBySize = [...this.splitCaptureGroupsBySize(sortedKillGroups), ...this.splitCaptureGroupsBySize(suicideGroups)];
 
         // For each size group...
         for(const sizeGroup of splitBySize) { 
@@ -167,7 +167,7 @@ export default class ServerSimultaneousGameState extends ServerGameStateBase<ISi
         const groupsMissingPlayerMove = killedGroups.filter(g => !groupsContainingPlayerMove.some(pm => g.id === pm.id));
 
         // We should remove non-player moves first, so that a small group can capture a large group if it's a result of a move by the smaller player
-        return [...groupsMissingPlayerMove, ...groupsContainingPlayerMove];
+        return [groupsMissingPlayerMove, groupsContainingPlayerMove];
     }
 
     private splitCaptureGroupsBySize(groups: { id: IMove, items: IMove[] }[]): { id: IMove, items: IMove[] }[][] {

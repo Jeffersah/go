@@ -55,7 +55,8 @@ var ServerGameStateBase = /** @class */ (function () {
         if (groupsKilled.length === 0 || alwaysIncludeSelf) {
             var selfGroup = ServerGameStateBase.GetConnectedCells(cells, x, y);
             if (ServerGameStateBase.IsGroupDead(cells, selfGroup)) {
-                return [selfGroup];
+                groupsKilled.push(selfGroup);
+                return groupsKilled;
             }
         }
         return groupsKilled;

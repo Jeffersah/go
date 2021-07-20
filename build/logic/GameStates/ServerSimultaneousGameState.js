@@ -135,27 +135,27 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
         killedGroups = LinqLike_1.WithDistinct(killedGroups, function (g) { return g.id; }, function (a, b) { return a.x == b.x && a.y == b.y; });
         // Sort killed groups, smallest first
         // Also put the player groups last, so they are the last to be captured
-        killedGroups = this.sortCaptureGroups(killedGroups, lookForKill);
+        var _d = this.sortCaptureGroups(killedGroups, lookForKill), sortedKillGroups = _d[0], suicideGroups = _d[1];
         // Then split these in order into groups of the same size
-        var splitBySize = this.splitCaptureGroupsBySize(killedGroups);
+        var splitBySize = __spreadArray(__spreadArray([], this.splitCaptureGroupsBySize(sortedKillGroups)), this.splitCaptureGroupsBySize(suicideGroups));
         // For each size group...
-        for (var _d = 0, splitBySize_1 = splitBySize; _d < splitBySize_1.length; _d++) {
-            var sizeGroup = splitBySize_1[_d];
+        for (var _e = 0, splitBySize_1 = splitBySize; _e < splitBySize_1.length; _e++) {
+            var sizeGroup = splitBySize_1[_e];
             // Find which (if any) are dead still. (They might've been saved by a smaller group being killed earlier)
             var deadGroups = sizeGroup.filter(function (g) { return ServerGameStateBase_1.default.IsGroupDead(_this.cells, g.items); });
             // Score for each of their capture...
-            for (var _e = 0, deadGroups_1 = deadGroups; _e < deadGroups_1.length; _e++) {
-                var deadGroup = deadGroups_1[_e];
+            for (var _f = 0, deadGroups_1 = deadGroups; _f < deadGroups_1.length; _f++) {
+                var deadGroup = deadGroups_1[_f];
                 var captureCredit = this.getCaptureCredit(deadGroup.items);
                 var scorePer = Math.floor(deadGroup.items.length / captureCredit.length);
-                for (var _f = 0, captureCredit_1 = captureCredit; _f < captureCredit_1.length; _f++) {
-                    var captured = captureCredit_1[_f];
+                for (var _g = 0, captureCredit_1 = captureCredit; _g < captureCredit_1.length; _g++) {
+                    var captured = captureCredit_1[_g];
                     this.captureCounts[captured] += scorePer;
                 }
             }
             // ...and kill them
-            for (var _g = 0, deadGroups_2 = deadGroups; _g < deadGroups_2.length; _g++) {
-                var deadGroup = deadGroups_2[_g];
+            for (var _h = 0, deadGroups_2 = deadGroups; _h < deadGroups_2.length; _h++) {
+                var deadGroup = deadGroups_2[_h];
                 ServerGameStateBase_1.default.ClearGroup(this.cells, deadGroup.items);
             }
         }
@@ -181,7 +181,7 @@ var ServerSimultaneousGameState = /** @class */ (function (_super) {
         var groupsContainingPlayerMove = killedGroups.filter(function (g) { return g.items.some(function (m) { return playerMoves.findIndex(function (p) { return p.x === m.x && p.y === m.y; }) !== -1; }); });
         var groupsMissingPlayerMove = killedGroups.filter(function (g) { return !groupsContainingPlayerMove.some(function (pm) { return g.id === pm.id; }); });
         // We should remove non-player moves first, so that a small group can capture a large group if it's a result of a move by the smaller player
-        return __spreadArray(__spreadArray([], groupsMissingPlayerMove), groupsContainingPlayerMove);
+        return [groupsMissingPlayerMove, groupsContainingPlayerMove];
     };
     ServerSimultaneousGameState.prototype.splitCaptureGroupsBySize = function (groups) {
         var result = [];

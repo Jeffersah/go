@@ -52,7 +52,8 @@ export default class ServerGameStateBase<TRules extends IGameRules> {
         if(groupsKilled.length === 0 || alwaysIncludeSelf) {
             const selfGroup = ServerGameStateBase.GetConnectedCells(cells, x, y);
             if(ServerGameStateBase.IsGroupDead(cells, selfGroup)) {
-                return[selfGroup];
+                groupsKilled.push(selfGroup);
+                return groupsKilled;
             }
         }
         return groupsKilled;
