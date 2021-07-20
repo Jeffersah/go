@@ -1,4 +1,6 @@
+import useSize from "@react-hook/size";
 import React from "react";
+import { useRef } from "react";
 import IPlayer from "../../../../go-common/IPlayer";
 import GameController from "../../Rest/GameController";
 import GameInfoComponent from "./GameInfoComponent";
@@ -20,6 +22,9 @@ export default function InGameComponent(props: { gameController: GameController,
     const rules = props.gameController.room.rules;
     const playerIndex = props.gameController.room.players.findIndex(p => p.id === props.player.id);
     const myTurn = gameState?.myTurn ?? false;
+
+    const gameWrapper = useRef<any>();
+    const [width, height] = useSize(gameWrapper as any);
 
     React.useEffect(() => {
         props.gameController.bindHandler(setGameState);
@@ -65,9 +70,9 @@ export default function InGameComponent(props: { gameController: GameController,
             });
     }
 
-    return <div className='flex row'>
+    return <div className='flex row gamerow' ref={gameWrapper}>
         <div className='flex column game'>
-            <svg viewBox={'0 0 ' + rules.boardSize + ' ' + rules.boardSize}>
+            <svg viewBox={'0 0 ' + rules.boardSize + ' ' + rules.boardSize} style={{ width: Math.min(width, height) + 'px', height: Math.min(width, height) + 'px'}}>
                 <defs>
                     {gradients}
                 </defs>
